@@ -1,0 +1,24 @@
+name: Build Lite Blender for Android
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-lite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build pkgconf patchelf nasm yasm autoconf automake libtool libtool-bin bison flex gperf texinfo curl wget git git-lfs zip unzip xz-utils bzip2 rsync file openjdk-17-jdk python3 python3-pip python3-venv python3-setuptools libssl-dev zlib1g-dev libffi-dev libsqlite3-dev libbz2-dev libreadline-dev libncurses-dev uuid-dev tk-dev
+
+      - name: Run Lite Profile Build Script
+        run: |
+          # Automatically triggers the lightweight profile build as per ANDROID_BUILD_GUIDE.md
+          bash build_files/android/build_apk.sh lite
